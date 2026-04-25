@@ -25,6 +25,7 @@ import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppRecordsRouteImport } from './routes/_app/records'
 import { Route as AppQrCodeRouteImport } from './routes/_app/qr-code'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
+import { Route as AppPermissionsRouteImport } from './routes/_app/permissions'
 import { Route as AppHospitalsRouteImport } from './routes/_app/hospitals'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
@@ -111,6 +112,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPermissionsRoute = AppPermissionsRouteImport.update({
+  id: '/permissions',
+  path: '/permissions',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHospitalsRoute = AppHospitalsRouteImport.update({
   id: '/hospitals',
   path: '/hospitals',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
   '/hospitals': typeof AppHospitalsRoute
+  '/permissions': typeof AppPermissionsRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
   '/hospitals': typeof AppHospitalsRoute
+  '/permissions': typeof AppPermissionsRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/hospitals': typeof AppHospitalsRoute
+  '/_app/permissions': typeof AppPermissionsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/qr-code': typeof AppQrCodeRoute
   '/_app/records': typeof AppRecordsRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/dashboard'
     | '/hospitals'
+    | '/permissions'
     | '/profile'
     | '/qr-code'
     | '/records'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/dashboard'
     | '/hospitals'
+    | '/permissions'
     | '/profile'
     | '/qr-code'
     | '/records'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/_app/analytics'
     | '/_app/dashboard'
     | '/_app/hospitals'
+    | '/_app/permissions'
     | '/_app/profile'
     | '/_app/qr-code'
     | '/_app/records'
@@ -409,6 +421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/permissions': {
+      id: '/_app/permissions'
+      path: '/permissions'
+      fullPath: '/permissions'
+      preLoaderRoute: typeof AppPermissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/hospitals': {
       id: '/_app/hospitals'
       path: '/hospitals'
@@ -459,6 +478,7 @@ interface AppRouteChildren {
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppHospitalsRoute: typeof AppHospitalsRoute
+  AppPermissionsRoute: typeof AppPermissionsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppQrCodeRoute: typeof AppQrCodeRoute
   AppRecordsRoute: typeof AppRecordsRoute
@@ -472,6 +492,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppHospitalsRoute: AppHospitalsRoute,
+  AppPermissionsRoute: AppPermissionsRoute,
   AppProfileRoute: AppProfileRoute,
   AppQrCodeRoute: AppQrCodeRoute,
   AppRecordsRoute: AppRecordsRoute,
