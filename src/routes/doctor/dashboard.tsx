@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useHealthStore } from "@/lib/health-store";
 import { ScanLine, Users, ClipboardList, ShieldCheck, Activity, FileText } from "lucide-react";
 
-export const Route = createFileRoute("/_doctor/dashboard")({
+export const Route = createFileRoute("/doctor/dashboard")({
   head: () => ({ meta: [{ title: "Clinician Dashboard — QR Health ID" }] }),
   component: DoctorDashboard,
 });
