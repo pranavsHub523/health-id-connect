@@ -14,6 +14,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DoctorSettingsRouteImport } from './routes/doctor/settings'
+import { Route as DoctorScanRouteImport } from './routes/doctor/scan'
+import { Route as DoctorRequestsRouteImport } from './routes/doctor/requests'
+import { Route as DoctorPatientsRouteImport } from './routes/doctor/patients'
 import { Route as DoctorDashboardRouteImport } from './routes/doctor/dashboard'
 import { Route as AppWearablesRouteImport } from './routes/_app/wearables'
 import { Route as AppSosRouteImport } from './routes/_app/sos'
@@ -26,6 +30,7 @@ import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAiInsightsRouteImport } from './routes/_app/ai-insights'
 import { Route as EmergencyRouteImport } from './routes/emergency.'
+import { Route as DoctorPatientIdRouteImport } from './routes/doctor/patient.$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -50,6 +55,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorSettingsRoute = DoctorSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorScanRoute = DoctorScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorRequestsRoute = DoctorRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorPatientsRoute = DoctorPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => DoctorRoute,
 } as any)
 const DoctorDashboardRoute = DoctorDashboardRouteImport.update({
   id: '/dashboard',
@@ -111,6 +136,11 @@ const EmergencyRoute = EmergencyRouteImport.update({
   path: '/emergency/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorPatientIdRoute = DoctorPatientIdRouteImport.update({
+  id: '/patient/$id',
+  path: '/patient/$id',
+  getParentRoute: () => DoctorRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -129,6 +159,11 @@ export interface FileRoutesByFullPath {
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -147,6 +182,11 @@ export interface FileRoutesByTo {
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -167,6 +207,11 @@ export interface FileRoutesById {
   '/_app/sos': typeof AppSosRoute
   '/_app/wearables': typeof AppWearablesRoute
   '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,6 +232,11 @@ export interface FileRouteTypes {
     | '/sos'
     | '/wearables'
     | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,6 +255,11 @@ export interface FileRouteTypes {
     | '/sos'
     | '/wearables'
     | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   id:
     | '__root__'
     | '/'
@@ -224,6 +279,11 @@ export interface FileRouteTypes {
     | '/_app/sos'
     | '/_app/wearables'
     | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -271,6 +331,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/doctor/settings': {
+      id: '/doctor/settings'
+      path: '/settings'
+      fullPath: '/doctor/settings'
+      preLoaderRoute: typeof DoctorSettingsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/scan': {
+      id: '/doctor/scan'
+      path: '/scan'
+      fullPath: '/doctor/scan'
+      preLoaderRoute: typeof DoctorScanRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/requests': {
+      id: '/doctor/requests'
+      path: '/requests'
+      fullPath: '/doctor/requests'
+      preLoaderRoute: typeof DoctorRequestsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/patients': {
+      id: '/doctor/patients'
+      path: '/patients'
+      fullPath: '/doctor/patients'
+      preLoaderRoute: typeof DoctorPatientsRouteImport
+      parentRoute: typeof DoctorRoute
     }
     '/doctor/dashboard': {
       id: '/doctor/dashboard'
@@ -356,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmergencyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctor/patient/$id': {
+      id: '/doctor/patient/$id'
+      path: '/patient/$id'
+      fullPath: '/doctor/patient/$id'
+      preLoaderRoute: typeof DoctorPatientIdRouteImport
+      parentRoute: typeof DoctorRoute
+    }
   }
 }
 
@@ -389,10 +484,20 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface DoctorRouteChildren {
   DoctorDashboardRoute: typeof DoctorDashboardRoute
+  DoctorPatientsRoute: typeof DoctorPatientsRoute
+  DoctorRequestsRoute: typeof DoctorRequestsRoute
+  DoctorScanRoute: typeof DoctorScanRoute
+  DoctorSettingsRoute: typeof DoctorSettingsRoute
+  DoctorPatientIdRoute: typeof DoctorPatientIdRoute
 }
 
 const DoctorRouteChildren: DoctorRouteChildren = {
   DoctorDashboardRoute: DoctorDashboardRoute,
+  DoctorPatientsRoute: DoctorPatientsRoute,
+  DoctorRequestsRoute: DoctorRequestsRoute,
+  DoctorScanRoute: DoctorScanRoute,
+  DoctorSettingsRoute: DoctorSettingsRoute,
+  DoctorPatientIdRoute: DoctorPatientIdRoute,
 }
 
 const DoctorRouteWithChildren =
