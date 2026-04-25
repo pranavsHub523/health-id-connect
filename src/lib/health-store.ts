@@ -303,10 +303,8 @@ export function getAudit(): AuditEntry[] {
 
 export function appendAudit(e: Omit<AuditEntry, "id" | "at">) {
   const entry: AuditEntry = { ...e, id: "au_" + Math.random().toString(36).slice(2, 10), at: new Date().toISOString() };
-  saveSet: {
-    const list = [entry, ...getAudit()].slice(0, 100);
-    safeSet(AUDIT_KEY, list);
-  }
+  const list = [entry, ...getAudit()].slice(0, 100);
+  safeSet(AUDIT_KEY, list);
 }
 
 // React hook for live store subscription
