@@ -6,8 +6,12 @@ import { getUser } from "@/lib/health-store";
 export const Route = createFileRoute("/_app")({
   beforeLoad: () => {
     if (typeof window === "undefined") return;
-    if (!getUser()) {
+    const u = getUser();
+    if (!u) {
       throw redirect({ to: "/login" });
+    }
+    if (u.role === "doctor") {
+      throw redirect({ to: "/doctor/dashboard" });
     }
   },
   component: AppLayout,
