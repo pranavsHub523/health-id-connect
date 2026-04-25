@@ -3,6 +3,38 @@
 
 import { useEffect, useState } from "react";
 
+export type UserRole = "patient" | "doctor";
+
+export type DoctorProfile = {
+  licenseNumber: string;
+  hospital: string;
+  specialty: string;
+  verified: boolean; // simulates admin verification of license/hospital ID
+};
+
+/** Permissions for RBAC. Patients & doctors have disjoint capability sets. */
+export const PERMISSIONS = {
+  patient: [
+    "profile:edit",
+    "qr:generate",
+    "qr:share",
+    "access:manage",
+    "records:view-own",
+    "sos:trigger",
+  ] as const,
+  doctor: [
+    "patient:scan",
+    "patient:request-access",
+    "records:view-granted",
+    "records:upload",
+    "analytics:view",
+  ] as const,
+} as const;
+
+export type Permission =
+  | (typeof PERMISSIONS.patient)[number]
+  | (typeof PERMISSIONS.doctor)[number];
+
 export type EmergencyContact = {
   id: string;
   name: string;
@@ -49,11 +81,41 @@ export type User = {
   id: string;
   email: string;
   name: string;
+  role: UserRole;
+  /** Mock JWT — base64-encoded {sub, role, exp}. Replace with real JWT in backend. */
+  token: string;
+  doctor?: DoctorProfile;
+};
+
+/** A doctor's request to access a patient's full medical record. */
+export type AccessRequest = {
+  id: string;
+  doctorId: string;
+  doctorName: string;
+  hospital: string;
+  specialty: string;
+  patientId: string; // the patient user id (or "self" in this mock)
+  reason: string;
+  status: "pending" | "approved" | "denied" | "revoked";
+  requestedAt: string;
+  decidedAt?: string;
+  /** ISO date when access expires (24h after approval). */
+  expiresAt?: string;
 };
 
 const AUTH_KEY = "qrhealth.auth.v1";
 const PROFILE_KEY = "qrhealth.profile.v1";
 const RECORDS_KEY = "qrhealth.records.v1";
+const REQUESTS_KEY = "qrhealth.requests.v1";
+const AUDIT_KEY = "qrhealth.audit.v1";
+
+export type AuditEntry = {
+  id: string;
+  at: string;
+  actor: string;
+  action: string;
+  detail?: string;
+};
 
 const defaultProfile: HealthProfile = {
   fullName: "Aarav Sharma",
@@ -103,15 +165,32 @@ function safeSet<T>(key: string, val: T) {
   window.dispatchEvent(new Event("qrhealth:update"));
 }
 
+/** Mock JWT — DO NOT use in production. Real backend must sign with a server secret. */
+function mockJwt(payload: Record<string, unknown>): string {
+  const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+  const body = btoa(JSON.stringify({ ...payload, iat: Date.now(), exp: Date.now() + 7 * 864e5 }));
+  const sig = btoa("mock-sig-" + Math.random().toString(36).slice(2));
+  return `${header}.${body}.${sig}`;
+}
+
 export function getUser(): User | null {
   return safeGet<User | null>(AUTH_KEY, null);
 }
 
-export function login(email: string, name?: string): User {
+export function login(opts: {
+  email: string;
+  name?: string;
+  role: UserRole;
+  doctor?: DoctorProfile;
+}): User {
+  const id = "u_" + Math.random().toString(36).slice(2, 10);
   const user: User = {
-    id: "u_" + Math.random().toString(36).slice(2, 10),
-    email,
-    name: name || email.split("@")[0],
+    id,
+    email: opts.email,
+    name: opts.name || opts.email.split("@")[0],
+    role: opts.role,
+    doctor: opts.role === "doctor" ? opts.doctor : undefined,
+    token: mockJwt({ sub: id, role: opts.role, email: opts.email }),
   };
   safeSet(AUTH_KEY, user);
   return user;
@@ -121,6 +200,13 @@ export function logout() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(AUTH_KEY);
   window.dispatchEvent(new Event("qrhealth:update"));
+}
+
+/** RBAC: check whether the current (or given) user has a permission. */
+export function hasPermission(user: User | null, perm: Permission): boolean {
+  if (!user) return false;
+  const allowed = PERMISSIONS[user.role] as readonly string[];
+  return allowed.includes(perm);
 }
 
 export function getProfile(): HealthProfile {
@@ -139,17 +225,103 @@ export function saveRecords(r: MedicalRecord[]) {
   safeSet(RECORDS_KEY, r);
 }
 
+/* ----------- Access requests (doctor ↔ patient consent) ----------- */
+
+const defaultRequests: AccessRequest[] = [
+  {
+    id: "ar_seed1",
+    doctorId: "doc_seed",
+    doctorName: "Dr. Neha Kulkarni",
+    hospital: "Apollo Hospital",
+    specialty: "Cardiology",
+    patientId: "self",
+    reason: "Follow-up consultation for hypertension management.",
+    status: "pending",
+    requestedAt: new Date(Date.now() - 36e5).toISOString(),
+  },
+];
+
+export function getRequests(): AccessRequest[] {
+  return safeGet(REQUESTS_KEY, defaultRequests);
+}
+
+export function saveRequests(rs: AccessRequest[]) {
+  safeSet(REQUESTS_KEY, rs);
+}
+
+export function createRequest(input: Omit<AccessRequest, "id" | "status" | "requestedAt">): AccessRequest {
+  const req: AccessRequest = {
+    ...input,
+    id: "ar_" + Math.random().toString(36).slice(2, 10),
+    status: "pending",
+    requestedAt: new Date().toISOString(),
+  };
+  saveRequests([req, ...getRequests()]);
+  appendAudit({ actor: input.doctorName, action: "Requested record access", detail: input.reason });
+  return req;
+}
+
+export function decideRequest(id: string, decision: "approved" | "denied" | "revoked", actor = "Patient") {
+  const list = getRequests().map((r) =>
+    r.id === id
+      ? {
+          ...r,
+          status: decision,
+          decidedAt: new Date().toISOString(),
+          expiresAt: decision === "approved" ? new Date(Date.now() + 24 * 36e5).toISOString() : undefined,
+        }
+      : r,
+  );
+  saveRequests(list);
+  const target = list.find((r) => r.id === id);
+  if (target) {
+    appendAudit({
+      actor,
+      action: `Access ${decision}`,
+      detail: `${target.doctorName} (${target.hospital})`,
+    });
+  }
+}
+
+/** Doctor-side: does this doctor currently have approved, non-expired access? */
+export function hasActiveAccess(doctorId: string, patientId = "self"): boolean {
+  const now = Date.now();
+  return getRequests().some(
+    (r) =>
+      r.doctorId === doctorId &&
+      r.patientId === patientId &&
+      r.status === "approved" &&
+      (!r.expiresAt || new Date(r.expiresAt).getTime() > now),
+  );
+}
+
+/* ----------- Audit log (simulated blockchain trail) ----------- */
+
+export function getAudit(): AuditEntry[] {
+  return safeGet<AuditEntry[]>(AUDIT_KEY, []);
+}
+
+export function appendAudit(e: Omit<AuditEntry, "id" | "at">) {
+  const entry: AuditEntry = { ...e, id: "au_" + Math.random().toString(36).slice(2, 10), at: new Date().toISOString() };
+  const list = [entry, ...getAudit()].slice(0, 100);
+  safeSet(AUDIT_KEY, list);
+}
+
 // React hook for live store subscription
 export function useHealthStore() {
   const [user, setUser] = useState<User | null>(() => getUser());
   const [profile, setProfile] = useState<HealthProfile>(() => getProfile());
   const [records, setRecords] = useState<MedicalRecord[]>(() => getRecords());
+  const [requests, setRequests] = useState<AccessRequest[]>(() => getRequests());
+  const [audit, setAudit] = useState<AuditEntry[]>(() => getAudit());
 
   useEffect(() => {
     const sync = () => {
       setUser(getUser());
       setProfile(getProfile());
       setRecords(getRecords());
+      setRequests(getRequests());
+      setAudit(getAudit());
     };
     window.addEventListener("qrhealth:update", sync);
     window.addEventListener("storage", sync);
@@ -159,7 +331,7 @@ export function useHealthStore() {
     };
   }, []);
 
-  return { user, profile, records };
+  return { user, profile, records, requests, audit };
 }
 
 // Build the QR payload (a URL pointing to the public emergency view)

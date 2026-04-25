@@ -11,19 +11,27 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DoctorSettingsRouteImport } from './routes/doctor/settings'
+import { Route as DoctorScanRouteImport } from './routes/doctor/scan'
+import { Route as DoctorRequestsRouteImport } from './routes/doctor/requests'
+import { Route as DoctorPatientsRouteImport } from './routes/doctor/patients'
+import { Route as DoctorDashboardRouteImport } from './routes/doctor/dashboard'
 import { Route as AppWearablesRouteImport } from './routes/_app/wearables'
 import { Route as AppSosRouteImport } from './routes/_app/sos'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppRecordsRouteImport } from './routes/_app/records'
 import { Route as AppQrCodeRouteImport } from './routes/_app/qr-code'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
+import { Route as AppPermissionsRouteImport } from './routes/_app/permissions'
 import { Route as AppHospitalsRouteImport } from './routes/_app/hospitals'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAiInsightsRouteImport } from './routes/_app/ai-insights'
 import { Route as EmergencyRouteImport } from './routes/emergency.'
+import { Route as DoctorPatientIdRouteImport } from './routes/doctor/patient.$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -35,6 +43,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorRoute = DoctorRouteImport.update({
+  id: '/doctor',
+  path: '/doctor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -43,6 +56,31 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorSettingsRoute = DoctorSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorScanRoute = DoctorScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorRequestsRoute = DoctorRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorPatientsRoute = DoctorPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorDashboardRoute = DoctorDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => DoctorRoute,
 } as any)
 const AppWearablesRoute = AppWearablesRouteImport.update({
   id: '/wearables',
@@ -74,6 +112,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPermissionsRoute = AppPermissionsRouteImport.update({
+  id: '/permissions',
+  path: '/permissions',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHospitalsRoute = AppHospitalsRouteImport.update({
   id: '/hospitals',
   path: '/hospitals',
@@ -99,9 +142,15 @@ const EmergencyRoute = EmergencyRouteImport.update({
   path: '/emergency/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorPatientIdRoute = DoctorPatientIdRouteImport.update({
+  id: '/patient/$id',
+  path: '/patient/$id',
+  getParentRoute: () => DoctorRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/doctor': typeof DoctorRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/emergency/': typeof EmergencyRoute
@@ -109,15 +158,23 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
   '/hospitals': typeof AppHospitalsRoute
+  '/permissions': typeof AppPermissionsRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
   '/settings': typeof AppSettingsRoute
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/doctor': typeof DoctorRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/emergency': typeof EmergencyRoute
@@ -125,17 +182,25 @@ export interface FileRoutesByTo {
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
   '/hospitals': typeof AppHospitalsRoute
+  '/permissions': typeof AppPermissionsRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
   '/settings': typeof AppSettingsRoute
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/doctor': typeof DoctorRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/emergency/': typeof EmergencyRoute
@@ -143,17 +208,25 @@ export interface FileRoutesById {
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/hospitals': typeof AppHospitalsRoute
+  '/_app/permissions': typeof AppPermissionsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/qr-code': typeof AppQrCodeRoute
   '/_app/records': typeof AppRecordsRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/sos': typeof AppSosRoute
   '/_app/wearables': typeof AppWearablesRoute
+  '/doctor/dashboard': typeof DoctorDashboardRoute
+  '/doctor/patients': typeof DoctorPatientsRoute
+  '/doctor/requests': typeof DoctorRequestsRoute
+  '/doctor/scan': typeof DoctorScanRoute
+  '/doctor/settings': typeof DoctorSettingsRoute
+  '/doctor/patient/$id': typeof DoctorPatientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/doctor'
     | '/login'
     | '/register'
     | '/emergency/'
@@ -161,15 +234,23 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/dashboard'
     | '/hospitals'
+    | '/permissions'
     | '/profile'
     | '/qr-code'
     | '/records'
     | '/settings'
     | '/sos'
     | '/wearables'
+    | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/doctor'
     | '/login'
     | '/register'
     | '/emergency'
@@ -177,16 +258,24 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/dashboard'
     | '/hospitals'
+    | '/permissions'
     | '/profile'
     | '/qr-code'
     | '/records'
     | '/settings'
     | '/sos'
     | '/wearables'
+    | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   id:
     | '__root__'
     | '/'
     | '/_app'
+    | '/doctor'
     | '/login'
     | '/register'
     | '/emergency/'
@@ -194,17 +283,25 @@ export interface FileRouteTypes {
     | '/_app/analytics'
     | '/_app/dashboard'
     | '/_app/hospitals'
+    | '/_app/permissions'
     | '/_app/profile'
     | '/_app/qr-code'
     | '/_app/records'
     | '/_app/settings'
     | '/_app/sos'
     | '/_app/wearables'
+    | '/doctor/dashboard'
+    | '/doctor/patients'
+    | '/doctor/requests'
+    | '/doctor/scan'
+    | '/doctor/settings'
+    | '/doctor/patient/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  DoctorRoute: typeof DoctorRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   EmergencyRoute: typeof EmergencyRoute
@@ -226,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctor': {
+      id: '/doctor'
+      path: '/doctor'
+      fullPath: '/doctor'
+      preLoaderRoute: typeof DoctorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -239,6 +343,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/doctor/settings': {
+      id: '/doctor/settings'
+      path: '/settings'
+      fullPath: '/doctor/settings'
+      preLoaderRoute: typeof DoctorSettingsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/scan': {
+      id: '/doctor/scan'
+      path: '/scan'
+      fullPath: '/doctor/scan'
+      preLoaderRoute: typeof DoctorScanRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/requests': {
+      id: '/doctor/requests'
+      path: '/requests'
+      fullPath: '/doctor/requests'
+      preLoaderRoute: typeof DoctorRequestsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/patients': {
+      id: '/doctor/patients'
+      path: '/patients'
+      fullPath: '/doctor/patients'
+      preLoaderRoute: typeof DoctorPatientsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/dashboard': {
+      id: '/doctor/dashboard'
+      path: '/dashboard'
+      fullPath: '/doctor/dashboard'
+      preLoaderRoute: typeof DoctorDashboardRouteImport
+      parentRoute: typeof DoctorRoute
     }
     '/_app/wearables': {
       id: '/_app/wearables'
@@ -282,6 +421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/permissions': {
+      id: '/_app/permissions'
+      path: '/permissions'
+      fullPath: '/permissions'
+      preLoaderRoute: typeof AppPermissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/hospitals': {
       id: '/_app/hospitals'
       path: '/hospitals'
@@ -317,6 +463,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmergencyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctor/patient/$id': {
+      id: '/doctor/patient/$id'
+      path: '/patient/$id'
+      fullPath: '/doctor/patient/$id'
+      preLoaderRoute: typeof DoctorPatientIdRouteImport
+      parentRoute: typeof DoctorRoute
+    }
   }
 }
 
@@ -325,6 +478,7 @@ interface AppRouteChildren {
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppHospitalsRoute: typeof AppHospitalsRoute
+  AppPermissionsRoute: typeof AppPermissionsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppQrCodeRoute: typeof AppQrCodeRoute
   AppRecordsRoute: typeof AppRecordsRoute
@@ -338,6 +492,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppHospitalsRoute: AppHospitalsRoute,
+  AppPermissionsRoute: AppPermissionsRoute,
   AppProfileRoute: AppProfileRoute,
   AppQrCodeRoute: AppQrCodeRoute,
   AppRecordsRoute: AppRecordsRoute,
@@ -348,9 +503,31 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface DoctorRouteChildren {
+  DoctorDashboardRoute: typeof DoctorDashboardRoute
+  DoctorPatientsRoute: typeof DoctorPatientsRoute
+  DoctorRequestsRoute: typeof DoctorRequestsRoute
+  DoctorScanRoute: typeof DoctorScanRoute
+  DoctorSettingsRoute: typeof DoctorSettingsRoute
+  DoctorPatientIdRoute: typeof DoctorPatientIdRoute
+}
+
+const DoctorRouteChildren: DoctorRouteChildren = {
+  DoctorDashboardRoute: DoctorDashboardRoute,
+  DoctorPatientsRoute: DoctorPatientsRoute,
+  DoctorRequestsRoute: DoctorRequestsRoute,
+  DoctorScanRoute: DoctorScanRoute,
+  DoctorSettingsRoute: DoctorSettingsRoute,
+  DoctorPatientIdRoute: DoctorPatientIdRoute,
+}
+
+const DoctorRouteWithChildren =
+  DoctorRoute._addFileChildren(DoctorRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  DoctorRoute: DoctorRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   EmergencyRoute: EmergencyRoute,
