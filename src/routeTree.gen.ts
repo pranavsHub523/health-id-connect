@@ -17,6 +17,7 @@ import { Route as AppSosRouteImport } from './routes/_app/sos'
 import { Route as AppQrCodeRouteImport } from './routes/_app/qr-code'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppAiInsightsRouteImport } from './routes/_app/ai-insights'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -57,11 +58,17 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAiInsightsRoute = AppAiInsightsRouteImport.update({
+  id: '/ai-insights',
+  path: '/ai-insights',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/ai-insights': typeof AppAiInsightsRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/ai-insights': typeof AppAiInsightsRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/_app/ai-insights': typeof AppAiInsightsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/qr-code': typeof AppQrCodeRoute
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/ai-insights'
     | '/dashboard'
     | '/profile'
     | '/qr-code'
@@ -102,6 +112,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/ai-insights'
     | '/dashboard'
     | '/profile'
     | '/qr-code'
@@ -112,6 +123,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/register'
+    | '/_app/ai-insights'
     | '/_app/dashboard'
     | '/_app/profile'
     | '/_app/qr-code'
@@ -183,10 +195,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/ai-insights': {
+      id: '/_app/ai-insights'
+      path: '/ai-insights'
+      fullPath: '/ai-insights'
+      preLoaderRoute: typeof AppAiInsightsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAiInsightsRoute: typeof AppAiInsightsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
   AppQrCodeRoute: typeof AppQrCodeRoute
@@ -194,6 +214,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAiInsightsRoute: AppAiInsightsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
   AppQrCodeRoute: AppQrCodeRoute,
