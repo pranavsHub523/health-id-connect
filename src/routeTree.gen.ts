@@ -13,6 +13,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppWearablesRouteImport } from './routes/_app/wearables'
 import { Route as AppSosRouteImport } from './routes/_app/sos'
 import { Route as AppQrCodeRouteImport } from './routes/_app/qr-code'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
@@ -37,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppWearablesRoute = AppWearablesRouteImport.update({
+  id: '/wearables',
+  path: '/wearables',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSosRoute = AppSosRouteImport.update({
   id: '/sos',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/sos': typeof AppSosRoute
+  '/wearables': typeof AppWearablesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/sos': typeof AppSosRoute
+  '/wearables': typeof AppWearablesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/qr-code': typeof AppQrCodeRoute
   '/_app/sos': typeof AppSosRoute
+  '/_app/wearables': typeof AppWearablesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/qr-code'
     | '/sos'
+    | '/wearables'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/qr-code'
     | '/sos'
+    | '/wearables'
   id:
     | '__root__'
     | '/'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/qr-code'
     | '/_app/sos'
+    | '/_app/wearables'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,6 +178,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/wearables': {
+      id: '/_app/wearables'
+      path: '/wearables'
+      fullPath: '/wearables'
+      preLoaderRoute: typeof AppWearablesRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/sos': {
       id: '/_app/sos'
@@ -211,6 +230,7 @@ interface AppRouteChildren {
   AppProfileRoute: typeof AppProfileRoute
   AppQrCodeRoute: typeof AppQrCodeRoute
   AppSosRoute: typeof AppSosRoute
+  AppWearablesRoute: typeof AppWearablesRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -219,6 +239,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfileRoute: AppProfileRoute,
   AppQrCodeRoute: AppQrCodeRoute,
   AppSosRoute: AppSosRoute,
+  AppWearablesRoute: AppWearablesRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
