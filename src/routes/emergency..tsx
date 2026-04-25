@@ -4,7 +4,7 @@ import { HeartPulse, Phone, AlertTriangle, Stethoscope, ShieldAlert, Volume2 } f
 import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 
-export const Route = createFileRoute("/emergency/$payload")({
+export const Route = createFileRoute("/emergency/")({
   head: () => ({ meta: [{ title: "Emergency Health Info" }, { name: "robots", content: "noindex" }] }),
   component: EmergencyView,
 });
@@ -47,7 +47,6 @@ function EmergencyView() {
           </Button>
         </div>
       </header>
-
       <main className="max-w-xl mx-auto p-4 sm:p-6 space-y-4">
         <section className="bg-card border border-border rounded-2xl p-5 shadow-elegant">
           <div className="flex items-start justify-between gap-3">
@@ -102,7 +101,7 @@ function EmergencyView() {
         </p>
       </main>
     </div>
-  );
+  )
 }
 
 function Section({ icon, title, tone, children }: { icon: React.ReactNode; title: string; tone: "warning" | "info" | "success"; children: React.ReactNode }) {
