@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,11 +24,6 @@ import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAiInsightsRouteImport } from './routes/_app/ai-insights'
 import { Route as EmergencyRouteImport } from './routes/emergency.'
 
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -103,7 +97,6 @@ const EmergencyRoute = EmergencyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/emergency/': typeof EmergencyRoute
   '/ai-insights': typeof AppAiInsightsRoute
   '/analytics': typeof AppAnalyticsRoute
@@ -119,7 +112,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/emergency': typeof EmergencyRoute
   '/ai-insights': typeof AppAiInsightsRoute
   '/analytics': typeof AppAnalyticsRoute
@@ -137,7 +129,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/emergency/': typeof EmergencyRoute
   '/_app/ai-insights': typeof AppAiInsightsRoute
   '/_app/analytics': typeof AppAnalyticsRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
-    | '/register'
     | '/emergency/'
     | '/ai-insights'
     | '/analytics'
@@ -171,7 +161,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/register'
     | '/emergency'
     | '/ai-insights'
     | '/analytics'
@@ -188,7 +177,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/login'
-    | '/register'
     | '/emergency/'
     | '/_app/ai-insights'
     | '/_app/analytics'
@@ -206,19 +194,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
   EmergencyRoute: typeof EmergencyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -352,7 +332,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
-  RegisterRoute: RegisterRoute,
   EmergencyRoute: EmergencyRoute,
 }
 export const routeTree = rootRouteImport
