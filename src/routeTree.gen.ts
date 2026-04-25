@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppWearablesRouteImport } from './routes/_app/wearables'
 import { Route as AppSosRouteImport } from './routes/_app/sos'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppRecordsRouteImport } from './routes/_app/records'
 import { Route as AppQrCodeRouteImport } from './routes/_app/qr-code'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
@@ -50,6 +51,11 @@ const AppWearablesRoute = AppWearablesRouteImport.update({
 const AppSosRoute = AppSosRouteImport.update({
   id: '/sos',
   path: '/sos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppRecordsRoute = AppRecordsRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
+  '/settings': typeof AppSettingsRoute
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
 }
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/qr-code': typeof AppQrCodeRoute
   '/records': typeof AppRecordsRoute
+  '/settings': typeof AppSettingsRoute
   '/sos': typeof AppSosRoute
   '/wearables': typeof AppWearablesRoute
 }
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/qr-code': typeof AppQrCodeRoute
   '/_app/records': typeof AppRecordsRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/sos': typeof AppSosRoute
   '/_app/wearables': typeof AppWearablesRoute
 }
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/qr-code'
     | '/records'
+    | '/settings'
     | '/sos'
     | '/wearables'
   fileRoutesByTo: FileRoutesByTo
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/qr-code'
     | '/records'
+    | '/settings'
     | '/sos'
     | '/wearables'
   id:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/qr-code'
     | '/_app/records'
+    | '/_app/settings'
     | '/_app/sos'
     | '/_app/wearables'
   fileRoutesById: FileRoutesById
@@ -227,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/sos'
       fullPath: '/sos'
       preLoaderRoute: typeof AppSosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/records': {
@@ -289,6 +308,7 @@ interface AppRouteChildren {
   AppProfileRoute: typeof AppProfileRoute
   AppQrCodeRoute: typeof AppQrCodeRoute
   AppRecordsRoute: typeof AppRecordsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppSosRoute: typeof AppSosRoute
   AppWearablesRoute: typeof AppWearablesRoute
 }
@@ -301,6 +321,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfileRoute: AppProfileRoute,
   AppQrCodeRoute: AppQrCodeRoute,
   AppRecordsRoute: AppRecordsRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppSosRoute: AppSosRoute,
   AppWearablesRoute: AppWearablesRoute,
 }
