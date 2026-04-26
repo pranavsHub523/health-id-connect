@@ -17,7 +17,14 @@ import { logout, useHealthStore } from "@/lib/health-store";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  danger?: boolean;
+};
+
+const navItems: readonly NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/profile", label: "Health Profile", icon: User },
   { to: "/qr-code", label: "My QR Code", icon: QrCode },
@@ -28,7 +35,7 @@ const navItems = [
   { to: "/records", label: "Medical Records", icon: FileText },
   { to: "/analytics", label: "Health Analytics", icon: LineChart },
   { to: "/settings", label: "Settings", icon: Settings },
-] as const;
+];
 
 export function AppSidebar() {
   const { location } = useRouterState();

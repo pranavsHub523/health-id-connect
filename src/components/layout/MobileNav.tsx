@@ -1,13 +1,20 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, QrCode, Siren, User, LineChart } from "lucide-react";
 
-const items = [
+type Item = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  danger?: boolean;
+};
+
+const items: readonly Item[] = [
   { to: "/dashboard", label: "Home", icon: LayoutDashboard },
   { to: "/qr-code", label: "QR", icon: QrCode },
   { to: "/sos", label: "SOS", icon: Siren, danger: true },
   { to: "/analytics", label: "Stats", icon: LineChart },
   { to: "/profile", label: "Profile", icon: User },
-] as const;
+];
 
 export function MobileNav() {
   const { location } = useRouterState();
