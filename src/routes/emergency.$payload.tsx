@@ -4,7 +4,7 @@ import { HeartPulse, Phone, AlertTriangle, Stethoscope, ShieldAlert, Volume2 } f
 import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 
-export const Route = createFileRoute("/emergency/")({
+export const Route = createFileRoute("/emergency/$payload")({
   head: () => ({ meta: [{ title: "Emergency Health Info" }, { name: "robots", content: "noindex" }] }),
   component: EmergencyView,
 });
